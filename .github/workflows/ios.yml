@@ -23,7 +23,7 @@ jobs:
       run: gem install fastlane
 
     - name: Set up Fastlane Match
-      run: fastlane match appstore
+      run: fastlane match adhoc
 
     - name: Build IPA
       run: fastlane build
