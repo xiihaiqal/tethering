@@ -2,9 +2,9 @@ name: Build IPA
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "master" ]
 
 jobs:
   build-ipa:
@@ -19,25 +19,14 @@ jobs:
       with:
         ruby-version: '3.1'
 
-    - name: Set up Xcode
-      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+    - name: Install Fastlane
+      run: gem install fastlane
+
+    - name: Set up Fastlane Match
+      run: fastlane match appstore
 
     - name: Build IPA
-      run: |
-        xcodebuild clean archive \
-          -project Tethering.xcodeproj \
-          -scheme Tethering \
-          -configuration Release \
-          -archivePath $PWD/build/Tethering.xcarchive \
-          -sdk iphoneos \
-          IPHONEOS_DEPLOYMENT_TARGET=12.0 \
-          -allowProvisioningUpdates
-
-        xcodebuild -exportArchive \
-          -archivePath $PWD/build/Tethering.xcarchive \
-          -exportPath $PWD/build \
-          -exportOptionsPlist ExportOptions.plist \
-          -allowProvisioningUpdates
+      run: fastlane build
 
     - name: Upload IPA
       uses: actions/upload-artifact@v3
