@@ -23,6 +23,8 @@ jobs:
       run: gem install fastlane
 
     - name: Set up Fastlane Match
+      env:
+        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Add your match password to GitHub Secrets
       run: fastlane match adhoc
 
     - name: Build IPA
