@@ -14,21 +14,23 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.1'
-
-    - name: Install Fastlane
-      run: gem install fastlane
-
-    - name: Set up Fastlane Match
-      env:
-        MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }} # Add your match password to GitHub Secrets
-      run: fastlane match adhoc
+    - name: Set up Xcode
+      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 
     - name: Build IPA
-      run: fastlane build
+      run: |
+        xcodebuild clean archive \
+          -workspace Tethering.xcworkspace \
+          -scheme Tethering \
+          -configuration Release \
+          -archivePath $PWD/build/Tethering.xcarchive \
+          -sdk iphoneos \
+          -destination 'generic/platform=iOS' \
+          CODE_SIGNING_REQUIRED=NO
+
+        xcodebuild -exportArchive \
+          -archivePath $PWD/build/Tethering.xcarchive \
+          -exportPath $PWD/build
 
     - name: Upload IPA
       uses: actions/upload-artifact@v3
