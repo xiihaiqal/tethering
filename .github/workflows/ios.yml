@@ -2,9 +2,9 @@ name: Build IPA
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "master" ]
 
 jobs:
   build-ipa:
@@ -26,14 +26,14 @@ jobs:
       run: |
         xcodebuild clean archive \
           -project tethering.xcodeproj \
-          -scheme tethering \
+          -scheme TetheringApp \
           -configuration Release \
-          -archivePath $PWD/build/tethering.xcarchive \
+          -archivePath $PWD/build/TetheringApp.xcarchive \
           -sdk iphoneos \
           IPHONEOS_DEPLOYMENT_TARGET=12.0
 
         xcodebuild -exportArchive \
-          -archivePath $PWD/build/tethering.xcarchive \
+          -archivePath $PWD/build/TetheringApp.xcarchive \
           -exportPath $PWD/build \
           -exportOptionsPlist ExportOptions.plist
 
@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: tethering.ipa
-        path: build/tethering.ipa
+        path: build/TetheringApp.ipa
