@@ -32,10 +32,12 @@ jobs:
           -sdk iphoneos \
           -destination 'generic/platform=iOS' \
           CODE_SIGNING_REQUIRED=NO
+          -allowProvisioningUpdates
 
         xcodebuild -exportArchive \
           -archivePath $PWD/build/Tethering.xcarchive \
           -exportPath $PWD/build \
+          -allowProvisioningUpdates
 
     - name: Upload IPA
       uses: actions/upload-artifact@v3
