@@ -17,13 +17,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '2.7'
-
-    - name: Install CocoaPods
-      run: |
-        gem install activesupport -v 7.1.4
-        gem install cocoapods
-        pod install
+        ruby-version: '3.1'
 
     - name: Set Xcode Deployment Target
       run: |
