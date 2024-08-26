@@ -17,11 +17,41 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.1'
+        ruby-version: '2.7'
 
     - name: Install CocoaPods
       run: |
+        gem install activesupport -v 7.1.4
         gem install cocoapods
         pod install
 
-    # The rest of your steps remain the same
+    - name: Set Xcode Deployment Target
+      run: |
+        /usr/libexec/PlistBuddy -c "Set :MinimumOSVersion 12.0" "${GITHUB_WORKSPACE}/tethering.xcodeproj/project.pbxproj"
+
+    - name: Set up Xcode
+      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+    - name: Build IPA
+      run: |
+        xcodebuild clean archive \
+          -workspace tethering.xcworkspace \
+          -scheme tethering \
+          -configuration Release \
+          -archivePath $PWD/build/tethering.xcarchive \
+          -destination "generic/platform=iOS" \
+          -sdk iphoneos \
+          -target tethering \
+          -destination 'generic/platform=iOS' \
+          IPHONEOS_DEPLOYMENT_TARGET=12.0
+
+        xcodebuild -exportArchive \
+          -archivePath $PWD/build/tethering.xcarchive \
+          -exportPath $PWD/build \
+          -exportOptionsPlist ExportOptions.plist
+
+    - name: Upload IPA
+      uses: actions/upload-artifact@v3
+      with:
+        name: tethering.ipa
+        path: build/tethering.ipa
