@@ -25,7 +25,7 @@ jobs:
     - name: Build IPA
       run: |
         xcodebuild clean archive \
-          -workspace tethering.xcworkspace \
+          -project tethering.xcodeproj \
           -scheme tethering \
           -configuration Release \
           -archivePath $PWD/build/tethering.xcarchive \
