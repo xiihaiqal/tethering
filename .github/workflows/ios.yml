@@ -40,7 +40,7 @@ jobs:
           -exportPath $PWD/build \
           -exportOptionsPlist ExportOptions.plist
 
-    - name: Upload IPA
+    - name: Upload IPA 
       uses: actions/upload-artifact@v3
       with:
         name: tethering.ipa
