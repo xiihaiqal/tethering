@@ -3,7 +3,7 @@ default_platform(:ios)
 platform :ios do
   desc "Build the iOS app"
   lane :build do
-    match(type: "appstore") # or "development" depending on your needs
+    match(type: "adhoc") # or "development" depending on your needs
     gym(scheme: "Tethering") # Replace with your actual scheme name
   end
 end
